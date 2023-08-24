@@ -32,22 +32,17 @@ func (h *Handler) GetDataRedis(w http.ResponseWriter, r *http.Request) {
 		Key: key,
 	}
 
-	type Response struct {
-		Message string      `json:"message"`
-		Data    interface{} `json:"data"`
-	}
-
 	value, err := h.getData.GetDataRedis(request)
 	if err != nil {
 		log.Println("Failed to get value in redis: ", err)
-		h.render.JSON(w, http.StatusNotFound, Response{
+		h.render.JSON(w, http.StatusNotFound, &dtredis.ResponseData{
 			Message: "Failed to get data",
 			Data:    http.StatusNotFound,
 		})
 		return
 	}
 
-	h.render.JSON(w, http.StatusOK, Response{
+	h.render.JSON(w, http.StatusOK, &dtredis.ResponseData{
 		Message: "Success",
 		Data:    value,
 	})

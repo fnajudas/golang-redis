@@ -3,6 +3,7 @@ module golangredis
 go 1.21.0
 
 require (
+	github.com/alicebob/miniredis/v2 v2.30.5
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f
@@ -16,9 +17,7 @@ require (
 
 require (
 	github.com/alicebob/gopher-json v0.0.0-20200520072559-a9ecdc9d1d3a // indirect
-	github.com/alicebob/miniredis/v2 v2.30.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/elliotchance/redismock v1.5.3 // indirect
 	github.com/go-stack/stack v1.6.0 // indirect
 	github.com/inconshreveable/log15 v0.0.0-20170622235902-74a0988b5f80 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
