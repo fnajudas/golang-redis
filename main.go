@@ -7,6 +7,8 @@ import (
 	"golangredis/routes"
 	"os"
 
+	setDatabase "golangredis/storage/setRedis"
+
 	setDataHandler "golangredis/controller/setRedis"
 	setDataStorage "golangredis/storage/setRedis"
 
@@ -23,6 +25,7 @@ func main() {
 	var Database = mysql.Db{}
 	Database.DatabaseConnection()
 	defer Database.Database.Close()
+	db := Database.Database
 
 	// Membuat instance Redis
 	var redisInstance = redis.Redis{}
@@ -36,7 +39,8 @@ func main() {
 	getDataStorage := getDataStorage.NewGetData(ctx, redisClient)
 	getDataHandler := getDataHandler.NewHandler(getDataStorage, render)
 
-	setDataStorage := setDataStorage.NewSetRedis(ctx, redisClient)
+	setDatabase := setDatabase.NewSetMysql(db)
+	setDataStorage := setDataStorage.NewSetRedis(ctx, redisClient, setDatabase)
 	setDataHandler := setDataHandler.NewSetRedis(setDataStorage, getDataStorage)
 
 	r := routes.Routes{
