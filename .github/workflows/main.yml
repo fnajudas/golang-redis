@@ -1,0 +1,50 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: actions/setup-docker@v2
+      with:
+        docker-version: 24.0.5
+
+    - name: Start MySQL Container
+      run: |
+        docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=fatan12345 -e MYSQL_DATABASE=learning mysql:latest
+
+    - name: Start Redis Container
+      run: |
+        docker run -d --name redis redis:latest
+
+    - name: Build Docker Image
+      run: |
+        docker build -t golang-redis:${{ github.sha }} .
+        docker tag golang-redis:${{ github.sha }} golang-redis:latest
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push Docker Image
+      run: |
+        docker push golang-redis:${{ github.sha }}
+        docker push golang-redis:latest
+
+    - name: Stop Containers
+      run: |
+        docker stop mysql
+        docker rm mysql
+        docker stop redis
+        docker rm redis
