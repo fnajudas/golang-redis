@@ -1,0 +1,17 @@
+# Dockerfile
+FROM golang:1.21.0
+
+WORKDIR /app
+
+# Menyalin file go.mod dan go.sum untuk mengoptimalkan caching dependensi
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Menyalin seluruh konten proyek ke dalam direktori kerja di kontainer
+COPY . .
+
+# Membangun aplikasi Go
+RUN go build -o golang-redis
+
+# Menjalankan aplikasi ketika kontainer dimulai
+CMD ["./golang-redis"]
